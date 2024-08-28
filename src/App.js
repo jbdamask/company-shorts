@@ -95,12 +95,20 @@ function App() {
                                 required
                             />
                         </div>
-                        <button type="submit" className="w-full sm:w-auto bg-blue-600 text-gray-100 px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors duration-200">
-                            Fetch Data
+                        <button 
+                            type="submit" 
+                            className="w-full sm:w-auto bg-blue-600 text-gray-100 px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Fetching...' : 'Fetch Data'}
                         </button>
                     </div>
                 </form>
-                {isLoading && <p className="text-blue-300 text-center">Loading...</p>}
+                {isLoading && (
+                    <div className="flex justify-center items-center">
+                        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+                    </div>
+                )}
                 {data && (
                     <div className="bg-gray-700 bg-opacity-50 p-4 rounded-md text-gray-100 space-y-4 break-words overflow-hidden">
                         <ReactMarkdown
