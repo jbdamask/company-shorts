@@ -9,6 +9,9 @@
 # testing
 /coverage
 
+# replit
+.replit
+
 # next.js
 /.next/
 /out/
