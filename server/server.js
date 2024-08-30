@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { Configuration, OpenAIApi } from "openai";
+// import OpenAI from "openai";
 import axios from "axios";
 
 const app = express();
@@ -10,11 +10,10 @@ app.use(express.json());
 
 const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY;
 
-const configuration = new Configuration({
-  apiKey: PERPLEXITY_API_KEY,
-  basePath: "https://api.perplexity.ai",
-});
-const openai = new OpenAIApi(configuration);
+// const openai = new OpenAI({
+//   apiKey: PERPLEXITY_API_KEY,
+//   basePath: "https://api.perplexity.ai",  
+// });
 
 app.get("/", (req, res) => {
   res.send("Hello from Replit!");
@@ -80,7 +79,7 @@ function scrubSensitiveInfo(text) {
   return text.replace(/([A-Za-z0-9_-]{20,})/g, "[REDACTED]");
 }
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

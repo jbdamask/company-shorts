@@ -8,9 +8,9 @@ import 'tailwindcss/tailwind.css'; // Import Tailwind CSS
 
 function App() {
     const [inputData, setInputData] = useState('');
-    const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [responseData, setResponseData] = useState('');
 
     const extractRootDomain = (input) => {
         try {
@@ -39,10 +39,10 @@ function App() {
         }
         setIsLoading(true);
         setError(null);
-        setData(null);
+        setResponseData('');
         
         try {
-            const response = await fetch('https://perplexity-cors-johndamask.replit.app/api/research', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/research`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -54,8 +54,12 @@ function App() {
                 throw new Error('Network response was not ok');
             }
         
-            const result = await response.json();
-            setData(result.result);
+            const data = await response.json();
+            if (data && data.result) {
+                setResponseData(data.result);
+            } else {
+                throw new Error('Received data is not in the expected format');
+            }
         } catch (err) {
             setError(err.message);
         } finally {
@@ -74,6 +78,11 @@ function App() {
             return `${content}References${linkedReferences}`;
         }
         return text;
+    };
+
+    const formatMarkdown = (text) => {
+        // Replace \n with actual newlines
+        return text.replace(/\\n/g, '\n');
     };
 
     return (
@@ -108,8 +117,9 @@ function App() {
                     <div className="flex justify-center items-center">
                         <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
                     </div>
-                )}
-                {data && (
+                )}                
+
+                {responseData && (
                     <div className="bg-gray-700 bg-opacity-50 p-4 rounded-md text-gray-100 space-y-4 break-words overflow-hidden">
                         <ReactMarkdown
                             remarkPlugins={[remarkBreaks]}
@@ -118,7 +128,7 @@ function App() {
                                 a: ({node, ...props}) => <a {...props} className="text-blue-300 hover:underline" target="_blank" rel="noopener noreferrer" />
                             }}
                         >
-                            {processReferences(data)}
+                            {processReferences(formatMarkdown(responseData))}
                         </ReactMarkdown>
                     </div>
                 )}

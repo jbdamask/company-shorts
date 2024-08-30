@@ -1,6 +1,8 @@
    // src/api.js
+   import config from './config';
+
    export const fetchData = async (data) => {
-    const response = await fetch('https://your-replit-project.repl.co/api/chat', {
+    const response = await fetch(`${config.apiUrl}/api/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
