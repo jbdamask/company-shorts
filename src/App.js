@@ -9,6 +9,9 @@ import DodgeGame from './utils/dodge-game';
 
 function App() {
     console.log("API URL:", process.env.REACT_APP_API_URL);
+    console.log("API URL from env:", process.env.REACT_APP_API_URL);
+    const apiUrl = process.env.REACT_APP_API_URL || 'https://perplexity-cors-johndamask.replit.app';
+    console.log("API URL used:", apiUrl);
     const [inputData, setInputData] = useState('');
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +37,7 @@ function App() {
 
     const handleFetchData = async (e) => {
         e.preventDefault();
+        console.log("Fetching from:", `${apiUrl}/api/research`);
         const rootDomain = extractRootDomain(inputData);
         if (!rootDomain) {
             setError("Please enter a valid URL");
@@ -44,7 +48,7 @@ function App() {
         setResponseData('');
         
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/research`, {
+            const response = await fetch(`${apiUrl}/api/research`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
