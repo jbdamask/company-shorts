@@ -2,6 +2,7 @@
    import config from './config';
 
    export const fetchData = async (data) => {
+    console.log("config.apiUrl:", config.apiUrl);    
     const response = await fetch(`${config.apiUrl}/api/chat`, {
       method: 'POST',
       headers: {

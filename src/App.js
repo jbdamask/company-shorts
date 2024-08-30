@@ -8,6 +8,7 @@ import 'tailwindcss/tailwind.css'; // Import Tailwind CSS
 import DodgeGame from './utils/dodge-game';
 
 function App() {
+    console.log("API URL:", process.env.REACT_APP_API_URL);
     const [inputData, setInputData] = useState('');
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
