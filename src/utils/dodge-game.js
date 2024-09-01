@@ -15,7 +15,22 @@ const MarioDodgeGame = () => {
       }
     };
 
+    const handleTouchStart = (e) => {
+      const touchStartX = e.touches[0].clientX;
+      const handleTouchMove = (e) => {
+        const touchEndX = e.touches[0].clientX;
+        if (touchEndX < touchStartX && marioPosition > 0) {
+          setMarioPosition(prev => Math.max(0, prev - 10));
+        } else if (touchEndX > touchStartX && marioPosition < 160) {
+          setMarioPosition(prev => Math.min(160, prev + 10));
+        }
+        window.removeEventListener('touchmove', handleTouchMove);
+      };
+      window.addEventListener('touchmove', handleTouchMove);
+    };
+
     window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener('touchstart', handleTouchStart);
 
     const gameLoop = setInterval(() => {
       if (!gameOver) {
@@ -28,6 +43,7 @@ const MarioDodgeGame = () => {
 
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener('touchstart', handleTouchStart);
       clearInterval(gameLoop);
     };
   }, [gameOver, marioPosition, turtles]);
