@@ -9,6 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY;
+const PERPLEXITY_MODEL = process.env.PERPLEXITY_MODEL;
 
 // const openai = new OpenAI({
 //   apiKey: PERPLEXITY_API_KEY,
@@ -54,7 +55,7 @@ app.post("/api/research", async (req, res) => {
       "https://api.perplexity.ai/chat/completions",
       {
         // model: "llama-3-sonar-large-32k-online",
-        model: "llama-3.1-sonar-large-128k-online",
+        model: PERPLEXITY_MODEL,
         messages: messages,
       },
       {
