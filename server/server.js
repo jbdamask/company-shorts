@@ -10,6 +10,7 @@ app.use(express.json());
 
 const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY;
 const PERPLEXITY_MODEL = process.env.PERPLEXITY_MODEL;
+console.log("PERPLEXITY_MODEL", PERPLEXITY_MODEL);
 
 // const openai = new OpenAI({
 //   apiKey: PERPLEXITY_API_KEY,
