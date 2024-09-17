@@ -1,7 +1,10 @@
-import express from "express";
-import cors from "cors";
-// import OpenAI from "openai";
-import axios from "axios";
+import request from 'supertest';
+import express from 'express';
+import cors from 'cors';
+import axios from 'axios';
+import { jest } from '@jest/globals';
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
 
 const app = express();
 
@@ -9,15 +12,6 @@ app.use(cors());
 app.use(express.json());
 
 const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY;
-
-// const openai = new OpenAI({
-//   apiKey: PERPLEXITY_API_KEY,
-//   basePath: "https://api.perplexity.ai",  
-// });
-
-app.get("/", (req, res) => {
-  res.send("Hello from Replit!");
-});
 
 app.post("/api/research", async (req, res) => {
   const { url } = req.body;
@@ -88,7 +82,24 @@ function scrubSensitiveInfo(text) {
   return text.replace(/([A-Za-z0-9_-]{20,})/g, "[REDACTED]");
 }
 
-const PORT = process.env.PORT || 3002;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+describe('POST /api/research', () => {
+  it('should return research information for a valid URL', async () => {
+    const response = await request(app)
+      .post('/api/research')
+      .send({ url: 'https://example.com' })
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    expect(response.body.result).toBeDefined();
+  });
+
+//   it('should return 500 if there is an error from the API', async () => {
+//     const response = await request(app)
+//       .post('/api/research')
+//       .send({ url: 'https://invalid-url.nodomain' }) // Use an invalid URL to trigger an error
+//       .expect('Content-Type', /json/)
+//       .expect(500);
+
+//     expect(response.body.error).toBe('Internal Server Error');
+//   });
 });
