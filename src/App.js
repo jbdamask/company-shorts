@@ -6,6 +6,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import 'tailwindcss/tailwind.css'; // Import Tailwind CSS
 // import './globals.css';
 import DodgeGame from './utils/dodge-game';
+import { FaClipboard } from 'react-icons/fa'; // Import clipboard icon
 
 function App() {
     console.log("API URL:", process.env.REACT_APP_API_URL);
@@ -91,6 +92,14 @@ function App() {
         return text.replace(/\\n/g, '\n');
     };
 
+    const handleCopyToClipboard = () => {
+        navigator.clipboard.writeText(processReferences(formatMarkdown(responseData))).then(() => {
+            alert('Contents copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl w-full space-y-8 bg-gray-800 bg-opacity-50 p-8 rounded-xl backdrop-filter backdrop-blur-lg">
@@ -126,7 +135,13 @@ function App() {
                 )}                
 
                 {responseData && (
-                    <div className="bg-gray-700 bg-opacity-50 p-4 rounded-md text-gray-100 space-y-4 break-words overflow-hidden">
+                    <div className="relative bg-gray-700 bg-opacity-50 p-4 rounded-md text-gray-100 space-y-4 break-words overflow-hidden">
+                        <button 
+                            onClick={handleCopyToClipboard} 
+                            className="absolute top-2 right-2 bg-gray-600 text-gray-100 p-2 rounded-full hover:bg-gray-500 focus:outline-none"
+                        >
+                            <FaClipboard />
+                        </button>
                         <ReactMarkdown
                             remarkPlugins={[remarkBreaks]}
                             rehypePlugins={[rehypeRaw, rehypeSanitize]}
